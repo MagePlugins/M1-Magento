@@ -14,9 +14,9 @@
  *
  * @category   Zend
  * @package    Zend_Dom
- * @copyright  Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id$
+ * @version    $Id: Query.php 25033 2012-08-17 19:50:08Z matthew $
  */
 
 /**
@@ -29,18 +29,12 @@
  */
 #require_once 'Zend/Dom/Query/Result.php';
 
-/** @see Zend_Xml_Security */
-#require_once 'Zend/Xml/Security.php';
-
-/** @see Zend_Xml_Exception */
-#require_once 'Zend/Xml/Exception.php';
-
 /**
  * Query DOM structures based on CSS selectors and/or XPath
  *
  * @package    Zend_Dom
  * @subpackage Query
- * @copyright  Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 class Zend_Dom_Query
@@ -251,6 +245,7 @@ class Zend_Dom_Query
 
         $encoding = $this->getEncoding();
         libxml_use_internal_errors(true);
+        libxml_disable_entity_loader(true);
         if (null === $encoding) {
             $domDoc = new DOMDocument('1.0');
         } else {
@@ -259,14 +254,14 @@ class Zend_Dom_Query
         $type   = $this->getDocumentType();
         switch ($type) {
             case self::DOC_XML:
-                try {
-                    $domDoc = Zend_Xml_Security::scan($document, $domDoc);
-                    $success = ($domDoc !== false);
-                } catch (Zend_Xml_Exception $e) {
-                    #require_once 'Zend/Dom/Exception.php';
-                    throw new Zend_Dom_Exception(
-                        $e->getMessage()
-                    );
+                $success = $domDoc->loadXML($document);
+                foreach ($domDoc->childNodes as $child) {
+                    if ($child->nodeType === XML_DOCUMENT_TYPE_NODE) {
+                        #require_once 'Zend/Dom/Exception.php';
+                        throw new Zend_Dom_Exception(
+                            'Invalid XML: Detected use of illegal DOCTYPE'
+                        );
+                    }
                 }
                 break;
             case self::DOC_HTML:
@@ -280,6 +275,7 @@ class Zend_Dom_Query
             $this->_documentErrors = $errors;
             libxml_clear_errors();
         }
+        libxml_disable_entity_loader(false);
         libxml_use_internal_errors(false);
 
         if (!$success) {
@@ -287,7 +283,7 @@ class Zend_Dom_Query
             throw new Zend_Dom_Exception(sprintf('Error parsing document (type == %s)', $type));
         }
 
-        $nodeList = $this->_getNodeList($domDoc, $xpathQuery);
+        $nodeList   = $this->_getNodeList($domDoc, $xpathQuery);
         return new Zend_Dom_Query_Result($query, $xpathQuery, $domDoc, $nodeList);
     }
 

@@ -15,9 +15,9 @@
  * @category   Zend
  * @package    Zend_Service
  * @subpackage SlideShare
- * @copyright  Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id$
+ * @version    $Id: SlideShare.php 25283 2013-03-09 10:07:13Z frosch $
  */
 
 /**
@@ -35,9 +35,6 @@
  */
 #require_once 'Zend/Service/SlideShare/SlideShow.php';
 
-/** Zend_Xml_Security */
-#require_once 'Zend/Xml/Security.php';
-
 /**
  * The Zend_Service_SlideShare component is used to interface with the
  * slideshare.net web server to retrieve slide shows hosted on the web site for
@@ -47,7 +44,7 @@
  * @package    Zend_Service
  * @subpackage SlideShare
  * @throws     Zend_Service_SlideShare_Exception
- * @copyright  Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 class Zend_Service_SlideShare
@@ -379,7 +376,7 @@ class Zend_Service_SlideShare
             );
         }
 
-        $sxe = Zend_Xml_Security::scan($response->getBody());
+        $sxe = simplexml_load_string($response->getBody());
 
         if ($sxe->getName() == "SlideShareServiceError") {
             $message = (string)$sxe->Message[0];
@@ -440,7 +437,7 @@ class Zend_Service_SlideShare
                 );
             }
 
-            $sxe = Zend_Xml_Security::scan($response->getBody());
+            $sxe = simplexml_load_string($response->getBody());
 
             if ($sxe->getName() == "SlideShareServiceError") {
                 $message = (string)$sxe->Message[0];
@@ -588,7 +585,7 @@ class Zend_Service_SlideShare
                 );
             }
 
-            $sxe = Zend_Xml_Security::scan($response->getBody());
+            $sxe = simplexml_load_string($response->getBody());
 
             if ($sxe->getName() == "SlideShareServiceError") {
                 $message = (string)$sxe->Message[0];
