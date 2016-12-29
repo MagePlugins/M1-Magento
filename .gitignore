@@ -1,0 +1,63 @@
+#--------------------------#
+# Global Files Types       #
+#--------------------------#
+.svn*
+sitemap.xml
+*.log
+*.sql
+*.tar.*
+*.gz
+*.rar
+*.zip
+*.bz2
+*.bz
+*.tgz
+*.gzip
+*.tb2
+*.tbz2
+*.pdf
+*.log
+*.swm
+*.swn
+*.swp
+*.swo
+*.yml
+.DS_Store
+
+#--------------------------#
+# IDE Project Files/Folder #
+#--------------------------#
+/nbproject/
+/.idea/
+
+#--------------------------#
+# XDebug Extension         #
+#--------------------------#
+remote_log
+
+#--------------------------#
+# NGinx Specific Ignores   #
+#--------------------------#
+404.html
+
+#--------------------------#
+# Magento Specific Ignores #
+#--------------------------#
+/app/etc/local.xml
+/app/code/local/Zend/
+/app/code/local/Varien/
+/downloader/.cache/
+/downloader/cache.cfg
+/downloader/connect.cfg
+/includes/src/
+/var/
+/media/
+/sitemap/
+.magentointel-cache/
+index.php.sample
+php.ini.sample
+
+#--------------------------#
+# Other Specific Ignores   #
+#--------------------------#
+.modman/
