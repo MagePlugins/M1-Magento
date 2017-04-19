@@ -29,6 +29,7 @@ sitemap.xml
 #--------------------------#
 /nbproject/
 /.idea/
+.git_htmldir_placeholder
 
 #--------------------------#
 # XDebug Extension         #
